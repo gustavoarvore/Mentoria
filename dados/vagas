@@ -1,0 +1,34 @@
+import requests
+import json
+import os
+
+# URL da API da Gupy
+url_gupy = "https://api.gupy.io/..."
+
+# Função para fazer a requisição à API da Gupy
+def obter_dados_gupy():
+    response = requests.get(url_gupy)
+    if response.status_code == 200:
+        return response.json()  # Retorna os dados da API em formato JSON
+    else:
+        print(f"Erro na requisição: {response.status_code}")
+        return None
+
+# Função para salvar os dados em um arquivo JSON
+def salvar_dados_em_json(dados):
+    # Verifica se a pasta "dados/vagas" existe, caso contrário cria a pasta
+    os.makedirs("dados/vagas", exist_ok=True)
+    
+    # Caminho do arquivo onde os dados serão salvos
+    caminho_arquivo = "dados/vagas/vagas_gupy.json"
+    
+    # Salva os dados no arquivo JSON
+    with open(caminho_arquivo, 'w', encoding='utf-8') as f:
+        json.dump(dados, f, ensure_ascii=False, indent=4)
+    
+    print(f"Dados salvos com sucesso em {caminho_arquivo}")
+
+# Obtém os dados e salva em JSON
+dados = obter_dados_gupy()
+if dados:
+    salvar_dados_em_json(dados)
